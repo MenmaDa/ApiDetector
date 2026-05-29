@@ -20,7 +20,7 @@ def get_ocr():
     global ocr
     if ocr is None:
         from paddleocr import PaddleOCR
-        ocr = PaddleOCR(use_angle_cls=True, lang="en", show_log=False)
+        ocr = PaddleOCR(use_angle_cls=True, lang="en")
     return ocr
 
 def preprocess_image(path):
