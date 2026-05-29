@@ -14,8 +14,14 @@ UPLOAD_FOLDER = "temp"
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 # OCR estable
-ocr = PaddleOCR(use_angle_cls=True, lang="en", show_log=False)
+ocr = None
 
+def get_ocr():
+    global ocr
+    if ocr is None:
+        from paddleocr import PaddleOCR
+        ocr = PaddleOCR(use_angle_cls=True, lang="en", show_log=False)
+    return ocr
 
 def preprocess_image(path):
     img = cv2.imread(path)
@@ -53,7 +59,8 @@ def detect():
         cv2.imwrite(processed_path, processed)
 
         # OCR
-        result = ocr.ocr(processed_path, cls=False)
+        engine = get_ocr()
+        result = engine.ocr(processed_path, cls=False)
 
         # 🔥 DEBUG IMPORTANTE
         print("========== OCR RAW RESULT ==========")
@@ -97,5 +104,5 @@ def detect():
 
 
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 5000))
+    port = int(os.environ.get("PORT", 8080))
     app.run(host="0.0.0.0", port=port)

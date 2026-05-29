@@ -1,1 +1,0 @@
-web: gunicorn detector:app
